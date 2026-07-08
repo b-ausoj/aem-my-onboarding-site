@@ -8,9 +8,6 @@ helix-importer-ui
 *.bak
 .idea
 
-# local draft imagery (source of truth is da.live); regenerated for local preview
-drafts/media/
-
 # Ensure these files are tracked
 !CLAUDE.md
 !AGENTS.md
