@@ -5,33 +5,69 @@
 
 .hero {
   position: relative;
-  padding: 40px 24px;
-  min-height: 300px;
-}
-
-.hero h1 {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--background-color);
-}
-
-.hero picture {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  object-fit: cover;
+  display: flex;
+  align-items: flex-end;
   box-sizing: border-box;
+  min-height: 460px;
+  padding: 40px 24px;
+  overflow: hidden;
 }
 
-.hero img {
-  object-fit: cover;
+/* legibility scrim over the image */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    rgb(10 26 33 / 82%) 0%,
+    rgb(10 26 33 / 45%) 45%,
+    rgb(10 26 33 / 10%) 100%
+  );
+}
+
+.hero .hero-image {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+}
+
+.hero .hero-image img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+}
+
+.hero .hero-content {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  color: #fff;
+}
+
+.hero .hero-content h1 {
+  max-width: 20ch;
+  margin: 0 0 0.35em;
+  color: #fff;
+  text-wrap: balance;
+  text-shadow: 0 1px 12px rgb(10 26 33 / 45%);
+}
+
+.hero .hero-content p {
+  max-width: 52ch;
+  margin: 0.35em 0;
+  font-size: var(--body-font-size-m);
+  color: #fff;
+}
+
+.hero .hero-content p.button-wrapper {
+  margin-top: 1em;
 }
 
 @media (width >= 900px) {
   .hero {
-    padding: 40px 32px;
+    min-height: 560px;
+    padding: 56px 32px;
   }
 }

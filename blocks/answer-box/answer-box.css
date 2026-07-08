@@ -1,0 +1,41 @@
+.answer-box {
+  margin: 24px 0;
+  border: 1px solid #cfe0e6;
+  border-left: 6px solid var(--accent-color);
+  border-radius: 8px;
+  padding: 20px 24px;
+  background-color: #f2f7f9;
+}
+
+.answer-box .answer-box-label {
+  margin: 0 0 8px;
+  font-family: var(--heading-font-family);
+  font-size: var(--body-font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-hover-color);
+}
+
+.answer-box .answer-box-question {
+  margin-top: 0;
+  font-size: var(--heading-font-size-m);
+}
+
+.answer-box p {
+  margin: 0.4em 0 0;
+}
+
+.answer-box p:first-of-type {
+  margin-top: 0;
+}
+
+.answer-box > div > div > p:last-child {
+  margin-bottom: 0;
+}
+
+@media (width >= 900px) {
+  .answer-box {
+    padding: 24px 28px;
+  }
+}
