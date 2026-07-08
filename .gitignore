@@ -11,3 +11,9 @@ helix-importer-ui
 # Ensure these files are tracked
 !CLAUDE.md
 !AGENTS.md
+
+# staging area for manual DA media upload (not tracked)
+da-upload/
+
+# content images live in DA, not git
+/media/
