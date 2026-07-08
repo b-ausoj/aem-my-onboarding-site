@@ -9,11 +9,17 @@
 
 .cards > ul > li {
   border: 1px solid #dadada;
+  border-radius: 8px;
   background-color: var(--background-color);
+  overflow: hidden;
 }
 
 .cards .cards-card-body {
   margin: 16px;
+}
+
+.cards .cards-card-body h3 {
+  margin-top: 0;
 }
 
 .cards .cards-card-image {
@@ -24,4 +30,46 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+}
+
+/* pillar cards — clickable, elevated navigation tiles */
+.cards.pillars > ul > li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-color: #d7ddda;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cards.pillars > ul > li:hover,
+.cards.pillars > ul > li:focus-within {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px rgb(20 49 61 / 14%);
+}
+
+.cards.pillars .cards-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.cards.pillars .cards-card-body h3 {
+  color: var(--brand-color);
+}
+
+.cards.pillars .cards-card-link {
+  color: var(--brand-color);
+  text-decoration: none;
+}
+
+/* stretched link: the primary link covers the whole card */
+.cards.pillars .cards-card-linked .cards-card-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.cards.pillars > ul > li:hover .cards-card-link,
+.cards.pillars > ul > li:focus-within .cards-card-link {
+  color: var(--link-hover-color);
 }

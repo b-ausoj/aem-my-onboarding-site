@@ -11,13 +11,17 @@
  */
 
 :root {
-  /* colors */
-  --background-color: white;
-  --light-color: #f8f8f8;
-  --dark-color: #505050;
-  --text-color: #131313;
-  --link-color: #3b63fb;
-  --link-hover-color: #1d3ecf;
+  /* colors — Wildcamping Switzerland alpine palette */
+  --background-color: #fff;
+  --light-color: #eef2f1;
+  --dark-color: #45565e;
+  --text-color: #1a2b33;
+  --brand-color: #14313d; /* deep alpine slate-blue */
+  --heading-color: var(--brand-color);
+  --accent-color: #e26a2c; /* warm signal orange for CTAs */
+  --accent-hover-color: #c4551c;
+  --link-color: #1c6b8c; /* alpine teal-blue */
+  --link-hover-color: #124d66;
 
   /* fonts */
   --body-font-family: roboto, roboto-fallback, sans-serif;
@@ -109,6 +113,7 @@ h6 {
   font-family: var(--heading-font-family);
   font-weight: 600;
   line-height: 1.25;
+  color: var(--heading-color);
   scroll-margin: 40px;
 }
 
@@ -199,8 +204,8 @@ button.button:disabled {
 
 a.button.primary,
 button.button.primary {
-  border-color: var(--text-color);
-  background-color: var(--text-color);
+  border-color: var(--brand-color);
+  background-color: var(--brand-color);
   color: var(--background-color);
 }
 
@@ -254,17 +259,18 @@ button.button.secondary:disabled:focus-visible {
 /* high-impact call-to-action */
 a.button.accent,
 button.button.accent {
-  border-color: var(--link-color);
-  background-color: var(--link-color);
-  color: var(--background-color);
+  border-color: var(--accent-color);
+  background-color: var(--accent-color);
+  color: #fff;
 }
 
 a.button.accent:hover,
 a.button.accent:focus-visible,
 button.button.accent:hover,
 button.button.accent:focus-visible {
-  border-color: var(--link-hover-color);
-  background-color: var(--link-hover-color);
+  border-color: var(--accent-hover-color);
+  background-color: var(--accent-hover-color);
+  color: #fff;
 }
 
 a.button.accent[aria-disabled="true"],
@@ -322,4 +328,26 @@ main .section.highlight {
   background-color: var(--light-color);
   margin: 0;
   padding: 40px 0;
+}
+
+/* dark brand band — for "start here" nudges and CTA sections */
+main .section.brand {
+  margin: 0;
+  padding: 48px 0;
+  background-color: var(--brand-color);
+  color: #fff;
+}
+
+main .section.brand h1,
+main .section.brand h2,
+main .section.brand h3,
+main .section.brand h4,
+main .section.brand h5,
+main .section.brand h6 {
+  color: #fff;
+}
+
+main .section.brand a:not(.button) {
+  color: #fff;
+  text-decoration: underline;
 }
