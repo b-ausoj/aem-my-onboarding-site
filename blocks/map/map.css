@@ -1,0 +1,78 @@
+.map .map-intro {
+  margin: 0 0 16px;
+  max-width: 62ch;
+}
+
+.map .map-canvas {
+  position: relative; /* contains Leaflet's stacking context below the header */
+  z-index: 0;
+  width: 100%;
+  height: min(64vh, 620px);
+  min-height: 380px;
+  border: 1px solid #d7ddda;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--light-color);
+}
+
+.map .map-canvas-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+}
+
+.map .map-legend {
+  margin-top: 16px;
+}
+
+.map .map-legend-title {
+  margin: 0 0 10px;
+  font-family: var(--heading-font-family);
+  font-weight: 700;
+}
+
+.map .map-legend ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.map .map-legend li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.map .map-swatch {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  border-radius: 4px;
+  border: 1px solid rgb(0 0 0 / 15%);
+}
+
+.map .map-swatch-red { background-color: #c0392b; }
+.map .map-swatch-amber { background-color: #e0a021; }
+.map .map-swatch-green { background-color: #3a8a4f; }
+
+.map .map-disclaimer {
+  margin: 14px 0 0;
+  font-size: var(--body-font-size-xs);
+  color: var(--dark-color);
+}
+
+/* Leaflet's attribution/controls inherit the site font; keep them legible */
+.map .leaflet-container {
+  font-family: var(--body-font-family);
+}
+
+@media (width >= 900px) {
+  .map .map-legend ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
