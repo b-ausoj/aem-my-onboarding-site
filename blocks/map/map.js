@@ -1,12 +1,13 @@
 /**
- * Legality map: a Swiss base map overlaid with the official "forbidden" zones
- * — the Swiss National Park, wildlife rest zones (Wildruhezonen) and federal
- * game reserves (Jagdbanngebiete) — pulled live from geo.admin.ch, plus a
- * legend explaining the forbidden / grey-area / generally-tolerated tiers.
+ * Legality map: a greyscale Swiss base map (swisstopo) overlaid with the
+ * official wildlife/protection zones from geo.admin.ch — the Swiss National
+ * Park, wildlife rest zones (Wildruhezonen), federal game reserves and
+ * Wildtierschutzgebiete — with a legend that distinguishes legally-binding
+ * (rechtsverbindlich) zones from recommended (empfohlen) ones.
  *
  * Leaflet and its CSS are loaded lazily from a CDN so the map never blocks LCP.
- * Only the red zones are drawn from authoritative data; amber and green are
- * guidance the map cannot draw accurately (that patchwork is the whole point).
+ * Only these official zones are drawn; the map is constrained to Switzerland so
+ * tiles never disappear when panning/zooming beyond national coverage.
  *
  * Authored structure (optional single cell of intro text):
  *   <div class="map"><div><div>Intro paragraph…</div></div></div>
@@ -32,44 +33,41 @@ const FORBIDDEN_LAYERS = [
   'ch.bafu.wrz-jagdbanngebiete_select', // "Wildtierschutzgebiete" (wildlife reserves)
 ].join(',');
 
-const SWATCH_CLASSES = ['map-swatch-red', 'map-swatch-amber', 'map-swatch-green'];
+const SWATCH_CLASSES = ['map-swatch-red', 'map-swatch-amber'];
 
 const MAP_STRINGS = {
   en: {
     aria: 'Interactive map of where wild camping is forbidden, restricted or tolerated in Switzerland',
     title: 'What the colours mean',
     tiers: [
-      ['Forbidden', 'Swiss National Park, wildlife rest zones (<em>Wildruhezonen</em>) and federal game reserves. Drawn live from official swisstopo / BAFU data.'],
-      ['Grey area', "valleys, forests, farmland and the cantonal patchwork. Rules vary and aren't mappable; verify locally."],
-      ['Generally tolerated', 'a single-night bivouac high above the treeline, well away from the red zones.'],
+      ['Legally binding', 'The ban applies by law here — the Swiss National Park, federal game reserves and legally-binding wildlife rest zones (<em>Wildruhezonen</em>).'],
+      ['Recommended', 'Wildlife rest zones that are recommended, not (yet) legally binding — please respect them all the same.'],
     ],
-    disclaimer: 'Guidance only, not legal advice. Only the red zones come from official data — always check local and cantonal rules before you go.',
-    layer: 'Forbidden zones (official)',
+    disclaimer: 'Only these official zones are drawn, from real data. Everywhere else, always check the local and cantonal rules before you go — this is guidance, not legal advice.',
+    layer: 'Official zones',
     error: 'The map could not be loaded right now.',
   },
   de: {
     aria: 'Interaktive Karte, wo Wildcampen in der Schweiz verboten, eingeschränkt oder toleriert ist',
     title: 'Was die Farben bedeuten',
     tiers: [
-      ['Verboten', 'Schweizerischer Nationalpark, Wildruhezonen und eidgenössische Jagdbanngebiete. Live aus offiziellen swisstopo-/BAFU-Daten.'],
-      ['Grauzone', 'Täler, Wälder, Kulturland und der kantonale Flickenteppich. Die Regeln variieren und lassen sich nicht kartieren; vor Ort prüfen.'],
-      ['Meist toleriert', 'ein einzelnes Nachtbiwak hoch über der Baumgrenze, weit weg von den roten Zonen.'],
+      ['Rechtsverbindlich', 'Hier gilt das Verbot von Gesetzes wegen — der Schweizerische Nationalpark, eidgenössische Jagdbanngebiete und rechtsverbindliche Wildruhezonen.'],
+      ['Empfohlen', 'Wildruhezonen, die empfohlen und (noch) nicht rechtsverbindlich sind — bitte trotzdem respektieren.'],
     ],
-    disclaimer: 'Nur zur Orientierung, keine Rechtsberatung. Nur die roten Zonen stammen aus offiziellen Daten — prüfe immer die lokalen und kantonalen Regeln, bevor du losziehst.',
-    layer: 'Verbotene Zonen (offiziell)',
+    disclaimer: 'Nur diese offiziellen Zonen sind eingezeichnet, aus echten Daten. Überall sonst gilt: prüfe immer die lokalen und kantonalen Regeln, bevor du losziehst — dies ist eine Orientierungshilfe, keine Rechtsberatung.',
+    layer: 'Offizielle Zonen',
     error: 'Die Karte konnte gerade nicht geladen werden.',
   },
   fr: {
     aria: 'Carte interactive indiquant où le camping sauvage est interdit, restreint ou toléré en Suisse',
     title: 'Ce que signifient les couleurs',
     tiers: [
-      ['Interdit', 'Parc national suisse, zones de tranquillité de la faune (<em>Wildruhezonen</em>) et districts francs fédéraux. Tracé en direct à partir des données officielles swisstopo / OFEV.'],
-      ['Zone grise', 'vallées, forêts, terres agricoles et la mosaïque cantonale. Les règles varient et ne sont pas cartographiables ; vérifiez sur place.'],
-      ['Généralement toléré', "un bivouac d'une seule nuit haut au-dessus de la limite des arbres, loin des zones rouges."],
+      ['Juridiquement contraignant', 'Ici l’interdiction s’applique par la loi — le Parc national suisse, les districts francs fédéraux et les zones de tranquillité de la faune juridiquement contraignantes.'],
+      ['Recommandé', 'Zones de tranquillité de la faune recommandées, pas (encore) contraignantes — à respecter tout de même.'],
     ],
-    disclaimer: 'À titre indicatif uniquement, pas un conseil juridique. Seules les zones rouges proviennent de données officielles — vérifiez toujours les règles locales et cantonales avant de partir.',
-    layer: 'Zones interdites (officielles)',
-    error: "La carte n'a pas pu être chargée pour le moment.",
+    disclaimer: 'Seules ces zones officielles sont tracées, à partir de données réelles. Partout ailleurs, vérifiez toujours les règles locales et cantonales avant de partir — ceci est une aide indicative, pas un conseil juridique.',
+    layer: 'Zones officielles',
+    error: 'La carte n’a pas pu être chargée pour le moment.',
   },
 };
 
