@@ -301,6 +301,42 @@ main img {
   width: 100%;
 }
 
+/* lead line-art illustration: a paragraph holding only an icon, rendered as an
+   editorial spot drawing in the brand colour. Stacked above the heading on
+   narrow screens; moved into a left gutter beside the text where there's room. */
+.default-content-wrapper p:has(> .icon:only-child) {
+  margin: 0 0 4px;
+  line-height: 0;
+}
+
+.default-content-wrapper p:has(> .icon:only-child) .icon {
+  width: 54px;
+  height: 54px;
+}
+
+@media (width >= 600px) {
+  .default-content-wrapper:has(> p > .icon:only-child) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 24px;
+    align-items: start;
+  }
+
+  .default-content-wrapper:has(> p > .icon:only-child) > * {
+    grid-column: 2;
+  }
+
+  .default-content-wrapper:has(> p > .icon:only-child) > p:has(> .icon:only-child) {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+  }
+
+  .default-content-wrapper:has(> p > .icon:only-child) > :is(h1, h2, h3, h4, h5, h6) {
+    margin-top: 0;
+  }
+}
+
 /* sections */
 main > .section {
   margin: 40px 0;

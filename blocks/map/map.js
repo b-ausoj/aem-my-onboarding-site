@@ -137,7 +137,7 @@ export default async function decorate(block) {
   const { L } = window;
   const map = L.map(canvas, {
     center: [46.8, 8.23],
-    zoom: 8,
+    zoom: 9,
     minZoom: 8,
     maxZoom: 16,
     maxBounds: SWITZERLAND_BOUNDS,

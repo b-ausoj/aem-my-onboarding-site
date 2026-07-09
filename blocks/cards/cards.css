@@ -73,3 +73,23 @@
 .cards.pillars > ul > li:focus-within .cards-card-link {
   color: var(--link-hover-color);
 }
+
+/* line-art illustration at the top of a card (e.g. "what to look out for") */
+.cards .cards-card-body p:has(.icon) {
+  margin: 0 0 14px;
+  line-height: 0;
+}
+
+.cards .cards-card-body .icon {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--light-color);
+}
+
+.cards .cards-card-body .icon img {
+  width: 34px;
+  height: 34px;
+}
