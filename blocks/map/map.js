@@ -27,6 +27,7 @@ const FORBIDDEN_LAYERS = [
   'ch.bafu.schutzgebiete-schweizerischer_nationalpark',
   'ch.bafu.wrz-wildruhezonen_portal',
   'ch.bafu.bundesinventare-jagdbanngebiete',
+  'ch.bafu.wrz-jagdbanngebiete_select', // "Wildtierschutzgebiete" (wildlife reserves)
 ].join(',');
 
 const SWATCH_CLASSES = ['map-swatch-red', 'map-swatch-amber', 'map-swatch-green'];
