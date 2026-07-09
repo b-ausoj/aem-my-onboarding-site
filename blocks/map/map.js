@@ -21,7 +21,9 @@ const LEAFLET_CSS = `https://unpkg.com/leaflet@${LEAFLET_VERSION}/dist/leaflet.c
 const LEAFLET_JS = `https://unpkg.com/leaflet@${LEAFLET_VERSION}/dist/leaflet.js`;
 
 const SWISSTOPO_TILES = 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg';
-const OSM_TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+// Switzerland extent — keep the map from panning/zooming into the empty area
+// beyond swisstopo's national coverage (which is what made tiles disappear).
+const SWITZERLAND_BOUNDS = [[45.75, 5.8], [47.95, 10.6]];
 const GEOADMIN_WMS = 'https://wms.geo.admin.ch/';
 const FORBIDDEN_LAYERS = [
   'ch.bafu.schutzgebiete-schweizerischer_nationalpark',
@@ -138,25 +140,18 @@ export default async function decorate(block) {
   const map = L.map(canvas, {
     center: [46.8, 8.23],
     zoom: 8,
-    minZoom: 7,
+    minZoom: 8,
     maxZoom: 16,
+    maxBounds: SWITZERLAND_BOUNDS,
+    maxBoundsViscosity: 1,
     scrollWheelZoom: false,
   });
 
-  const base = L.tileLayer(SWISSTOPO_TILES, {
+  L.tileLayer(SWISSTOPO_TILES, {
     maxZoom: 18,
+    bounds: SWITZERLAND_BOUNDS,
     attribution: '© <a href="https://www.swisstopo.admin.ch/">swisstopo</a>',
-  });
-  base.on('tileerror', () => {
-    // fall back to OpenStreetMap if the swisstopo endpoint is unavailable
-    if (!map.hasLayer(base)) return;
-    map.removeLayer(base);
-    L.tileLayer(OSM_TILES, {
-      maxZoom: 19,
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(map);
-  });
-  base.addTo(map);
+  }).addTo(map);
 
   const forbidden = L.tileLayer.wms(GEOADMIN_WMS, {
     layers: FORBIDDEN_LAYERS,
@@ -165,6 +160,7 @@ export default async function decorate(block) {
     opacity: 0.9,
     version: '1.3.0',
     className: 'map-forbidden',
+    bounds: SWITZERLAND_BOUNDS,
     attribution: '© <a href="https://www.geo.admin.ch/">BAFU / geo.admin.ch</a>',
   });
   forbidden.addTo(map);
