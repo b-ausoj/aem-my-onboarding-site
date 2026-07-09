@@ -1,4 +1,5 @@
 import { getMetadata } from '../../scripts/aem.js';
+import { getLanguage, getLanguageRoot } from '../../scripts/scripts.js';
 import { loadFragment } from '../fragment/fragment.js';
 
 // media query match that indicates mobile/tablet width
@@ -109,13 +110,39 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
 }
 
 /**
+ * Builds a compact language switcher (EN · DE · FR) that links to the current
+ * page within each language tree.
+ * @returns {Element} the switcher nav element
+ */
+function buildLanguageSwitcher() {
+  const languages = [['en', 'EN', ''], ['de', 'DE', '/de'], ['fr', 'FR', '/fr']];
+  const current = getLanguage();
+  const root = getLanguageRoot();
+  let pagePath = window.location.pathname;
+  if (root && pagePath.startsWith(root)) pagePath = pagePath.slice(root.length) || '/';
+
+  const container = document.createElement('nav');
+  container.className = 'nav-languages';
+  container.setAttribute('aria-label', 'Language');
+  languages.forEach(([code, label, prefix]) => {
+    const link = document.createElement('a');
+    link.href = `${prefix}${pagePath}` || '/';
+    link.textContent = label;
+    link.hreflang = code;
+    if (code === current) link.setAttribute('aria-current', 'true');
+    container.append(link);
+  });
+  return container;
+}
+
+/**
  * loads and decorates the header, mainly the nav
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
   // load nav as fragment
   const navMeta = getMetadata('nav');
-  const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
+  const navPath = navMeta ? new URL(navMeta, window.location).pathname : `${getLanguageRoot()}/nav`;
   const fragment = await loadFragment(navPath);
 
   // decorate nav DOM
@@ -150,6 +177,10 @@ export default async function decorate(block) {
       });
     });
   }
+
+  // language switcher, right-aligned in the tools slot
+  const navTools = nav.querySelector('.nav-tools') || nav;
+  navTools.append(buildLanguageSwitcher());
 
   // hamburger for mobile
   const hamburger = document.createElement('div');

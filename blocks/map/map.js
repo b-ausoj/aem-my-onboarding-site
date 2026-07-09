@@ -14,6 +14,8 @@
  * @param {Element} block The map block element
  */
 
+import { getLanguage } from '../../scripts/scripts.js';
+
 const LEAFLET_VERSION = '1.9.4';
 const LEAFLET_CSS = `https://unpkg.com/leaflet@${LEAFLET_VERSION}/dist/leaflet.css`;
 const LEAFLET_JS = `https://unpkg.com/leaflet@${LEAFLET_VERSION}/dist/leaflet.js`;
@@ -26,6 +28,47 @@ const FORBIDDEN_LAYERS = [
   'ch.bafu.wrz-wildruhezonen_portal',
   'ch.bafu.bundesinventare-jagdbanngebiete',
 ].join(',');
+
+const SWATCH_CLASSES = ['map-swatch-red', 'map-swatch-amber', 'map-swatch-green'];
+
+const MAP_STRINGS = {
+  en: {
+    aria: 'Interactive map of where wild camping is forbidden, restricted or tolerated in Switzerland',
+    title: 'What the colours mean',
+    tiers: [
+      ['Forbidden', 'Swiss National Park, wildlife rest zones (<em>Wildruhezonen</em>) and federal game reserves. Drawn live from official swisstopo / BAFU data.'],
+      ['Grey area', "valleys, forests, farmland and the cantonal patchwork. Rules vary and aren't mappable; verify locally."],
+      ['Generally tolerated', 'a single-night bivouac high above the treeline, well away from the red zones.'],
+    ],
+    disclaimer: 'Guidance only, not legal advice. Only the red zones come from official data — always check local and cantonal rules before you go.',
+    layer: 'Forbidden zones (official)',
+    error: 'The map could not be loaded right now.',
+  },
+  de: {
+    aria: 'Interaktive Karte, wo Wildcampen in der Schweiz verboten, eingeschränkt oder toleriert ist',
+    title: 'Was die Farben bedeuten',
+    tiers: [
+      ['Verboten', 'Schweizerischer Nationalpark, Wildruhezonen und eidgenössische Jagdbanngebiete. Live aus offiziellen swisstopo-/BAFU-Daten.'],
+      ['Grauzone', 'Täler, Wälder, Kulturland und der kantonale Flickenteppich. Die Regeln variieren und lassen sich nicht kartieren; vor Ort prüfen.'],
+      ['Meist toleriert', 'ein einzelnes Nachtbiwak hoch über der Baumgrenze, weit weg von den roten Zonen.'],
+    ],
+    disclaimer: 'Nur zur Orientierung, keine Rechtsberatung. Nur die roten Zonen stammen aus offiziellen Daten — prüfe immer die lokalen und kantonalen Regeln, bevor du losziehst.',
+    layer: 'Verbotene Zonen (offiziell)',
+    error: 'Die Karte konnte gerade nicht geladen werden.',
+  },
+  fr: {
+    aria: 'Carte interactive indiquant où le camping sauvage est interdit, restreint ou toléré en Suisse',
+    title: 'Ce que signifient les couleurs',
+    tiers: [
+      ['Interdit', 'Parc national suisse, zones de tranquillité de la faune (<em>Wildruhezonen</em>) et districts francs fédéraux. Tracé en direct à partir des données officielles swisstopo / OFEV.'],
+      ['Zone grise', 'vallées, forêts, terres agricoles et la mosaïque cantonale. Les règles varient et ne sont pas cartographiables ; vérifiez sur place.'],
+      ['Généralement toléré', "un bivouac d'une seule nuit haut au-dessus de la limite des arbres, loin des zones rouges."],
+    ],
+    disclaimer: 'À titre indicatif uniquement, pas un conseil juridique. Seules les zones rouges proviennent de données officielles — vérifiez toujours les règles locales et cantonales avant de partir.',
+    layer: 'Zones interdites (officielles)',
+    error: "La carte n'a pas pu être chargée pour le moment.",
+  },
+};
 
 function loadScriptOnce(src) {
   return new Promise((resolve, reject) => {
@@ -66,19 +109,19 @@ export default async function decorate(block) {
   const canvas = document.createElement('div');
   canvas.className = 'map-canvas';
   canvas.setAttribute('role', 'application');
-  canvas.setAttribute('aria-label', 'Interactive map of where wild camping is forbidden, restricted or tolerated in Switzerland');
+  const strings = MAP_STRINGS[getLanguage()] || MAP_STRINGS.en;
+  canvas.setAttribute('aria-label', strings.aria);
   block.append(canvas);
 
   const legend = document.createElement('div');
   legend.className = 'map-legend';
+  const tiers = strings.tiers
+    .map(([label, desc], i) => `<li><span class="map-swatch ${SWATCH_CLASSES[i]}"></span><span><strong>${label}</strong> — ${desc}</span></li>`)
+    .join('');
   legend.innerHTML = `
-    <p class="map-legend-title">What the colours mean</p>
-    <ul>
-      <li><span class="map-swatch map-swatch-red"></span><span><strong>Forbidden</strong> — Swiss National Park, wildlife rest zones (<em>Wildruhezonen</em>) and federal game reserves. Drawn live from official swisstopo / BAFU data.</span></li>
-      <li><span class="map-swatch map-swatch-amber"></span><span><strong>Grey area</strong> — valleys, forests, farmland and the cantonal patchwork. Rules vary and aren't mappable; verify locally.</span></li>
-      <li><span class="map-swatch map-swatch-green"></span><span><strong>Generally tolerated</strong> — a single-night bivouac high above the treeline, well away from the red zones.</span></li>
-    </ul>
-    <p class="map-disclaimer">Guidance only, not legal advice. Only the red zones come from official data — always check local and cantonal rules before you go.</p>`;
+    <p class="map-legend-title">${strings.title}</p>
+    <ul>${tiers}</ul>
+    <p class="map-disclaimer">${strings.disclaimer}</p>`;
   block.append(legend);
 
   loadCSSOnce(LEAFLET_CSS);
@@ -86,7 +129,7 @@ export default async function decorate(block) {
     await loadScriptOnce(LEAFLET_JS);
   } catch (e) {
     canvas.classList.add('map-canvas-error');
-    canvas.innerHTML = '<p>The map could not be loaded right now. See <a href="/protected-zones">Protected zones</a> for where wild camping is forbidden.</p>';
+    canvas.innerHTML = `<p>${strings.error}</p>`;
     return;
   }
 
@@ -124,7 +167,7 @@ export default async function decorate(block) {
   });
   forbidden.addTo(map);
 
-  L.control.layers(null, { 'Forbidden zones (official)': forbidden }, { collapsed: false }).addTo(map);
+  L.control.layers(null, { [strings.layer]: forbidden }, { collapsed: false }).addTo(map);
 
   // Leaflet renders only a small tile patch if the container isn't at its
   // final size when the map initialises (block CSS can apply a beat later).
