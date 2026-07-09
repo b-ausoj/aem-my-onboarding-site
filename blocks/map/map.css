@@ -1,6 +1,5 @@
 .map .map-intro {
   margin: 0 0 16px;
-  max-width: 62ch;
 }
 
 .map .map-canvas {
@@ -77,6 +76,6 @@
 
 @media (width >= 900px) {
   .map .map-legend ul {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }

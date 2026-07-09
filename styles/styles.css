@@ -301,6 +301,18 @@ main img {
   width: 100%;
 }
 
+/* lead line-art illustration: a paragraph holding only an icon, set above a
+   heading, rendered as an editorial spot drawing in the brand colour */
+.default-content-wrapper p:has(> .icon:only-child) {
+  margin: 0 0 4px;
+  line-height: 0;
+}
+
+.default-content-wrapper p:has(> .icon:only-child) .icon {
+  width: 54px;
+  height: 54px;
+}
+
 /* sections */
 main > .section {
   margin: 40px 0;
