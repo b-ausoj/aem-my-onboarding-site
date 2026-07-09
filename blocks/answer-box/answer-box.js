@@ -8,6 +8,10 @@
  *
  * @param {Element} block The answer-box block element
  */
+import { getLanguage } from '../../scripts/scripts.js';
+
+const LABELS = { en: 'The short answer', de: 'Die kurze Antwort', fr: 'La réponse courte' };
+
 export default function decorate(block) {
   block.setAttribute('role', 'note');
 
@@ -16,7 +20,7 @@ export default function decorate(block) {
 
   const label = document.createElement('p');
   label.className = 'answer-box-label';
-  label.textContent = 'The short answer';
+  label.textContent = LABELS[getLanguage()] || LABELS.en;
 
   if (heading) {
     heading.classList.add('answer-box-question');

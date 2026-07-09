@@ -171,6 +171,25 @@ function decorateSectionMetadata(main) {
 }
 
 /**
+ * Language code for the current page, derived from a `/de/` or `/fr/` path
+ * prefix. Everything else (the root tree) is English.
+ * @returns {'de'|'fr'|'en'} the two-letter language code
+ */
+export function getLanguage() {
+  const [, segment] = window.location.pathname.split('/');
+  return segment === 'de' || segment === 'fr' ? segment : 'en';
+}
+
+/**
+ * Path prefix for the current language: '' for English, '/de' or '/fr'.
+ * @returns {string} the language root path
+ */
+export function getLanguageRoot() {
+  const lang = getLanguage();
+  return lang === 'en' ? '' : `/${lang}`;
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -189,7 +208,7 @@ export function decorateMain(main) {
  * @param {Element} doc The container element
  */
 async function loadEager(doc) {
-  document.documentElement.lang = 'en';
+  document.documentElement.lang = getLanguage();
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
