@@ -20,7 +20,7 @@ const LEAFLET_VERSION = '1.9.4';
 const LEAFLET_CSS = `https://unpkg.com/leaflet@${LEAFLET_VERSION}/dist/leaflet.css`;
 const LEAFLET_JS = `https://unpkg.com/leaflet@${LEAFLET_VERSION}/dist/leaflet.js`;
 
-const SWISSTOPO_TILES = 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg';
+const SWISSTOPO_TILES = 'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-grau/default/current/3857/{z}/{x}/{y}.jpeg';
 const OSM_TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const GEOADMIN_WMS = 'https://wms.geo.admin.ch/';
 const FORBIDDEN_LAYERS = [
@@ -161,8 +161,9 @@ export default async function decorate(block) {
     layers: FORBIDDEN_LAYERS,
     format: 'image/png',
     transparent: true,
-    opacity: 0.55,
+    opacity: 0.9,
     version: '1.3.0',
+    className: 'map-forbidden',
     attribution: '© <a href="https://www.geo.admin.ch/">BAFU / geo.admin.ch</a>',
   });
   forbidden.addTo(map);

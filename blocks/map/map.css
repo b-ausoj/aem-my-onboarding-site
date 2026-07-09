@@ -71,6 +71,11 @@
   font-family: var(--body-font-family);
 }
 
+/* Make the official forbidden-zone overlay pop against the grey base map */
+.map .map-forbidden {
+  filter: saturate(1.9) contrast(1.2);
+}
+
 @media (width >= 900px) {
   .map .map-legend ul {
     grid-template-columns: repeat(3, 1fr);
