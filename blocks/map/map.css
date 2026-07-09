@@ -58,7 +58,6 @@
 
 .map .map-swatch-red { background-color: #c0392b; }
 .map .map-swatch-amber { background-color: #e0a021; }
-.map .map-swatch-green { background-color: #3a8a4f; }
 
 .map .map-disclaimer {
   margin: 14px 0 0;
@@ -69,6 +68,11 @@
 /* Leaflet's attribution/controls inherit the site font; keep them legible */
 .map .leaflet-container {
   font-family: var(--body-font-family);
+}
+
+/* Make the official forbidden-zone overlay pop against the grey base map */
+.map .map-forbidden {
+  filter: saturate(1.9) contrast(1.2);
 }
 
 @media (width >= 900px) {
